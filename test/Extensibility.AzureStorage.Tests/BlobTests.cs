@@ -22,7 +22,7 @@ namespace Extensibility.AzureStorage.Tests
                 Import = TestHelper.BuildImport(),
                 Properties = new JObject
                 {
-                    ["name"] = "blobTest",
+                    ["name"] = "mrblobby",
                 }
             }, CancellationToken.None);
 
@@ -32,7 +32,7 @@ namespace Extensibility.AzureStorage.Tests
                 Import = TestHelper.BuildImport(),
                 Properties = new JObject
                 {
-                    ["containerName"] = "blobTest",
+                    ["containerName"] = "mrblobby",
                     ["name"] = "testfile.txt",
                     ["base64Content"] = Convert.ToBase64String(Encoding.UTF8.GetBytes("Extensibility Test!")),
                 }

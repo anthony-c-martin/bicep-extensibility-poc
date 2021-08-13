@@ -19,7 +19,7 @@
                 Import = TestHelper.BuildImport(),
                 Properties = new JObject
                 {
-                    ["name"] = "TestContainer",
+                    ["name"] = "test123",
                 }
             }, CancellationToken.None);
         }

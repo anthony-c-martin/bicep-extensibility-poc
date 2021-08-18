@@ -8,4 +8,9 @@
     <ProjectReference Include="../Extensibility.Core/Extensibility.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="KubernetesClient" Version="4.0.26" />
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+  </ItemGroup>
+
 </Project>

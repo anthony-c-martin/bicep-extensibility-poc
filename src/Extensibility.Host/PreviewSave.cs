@@ -12,9 +12,9 @@ using Extensibility.Core.Messages;
 
 namespace Extensibility.Host
 {
-    public static class Save
+    public static class PreviewSave
     {
-        [FunctionName("Save")]
+        [FunctionName("PreviewSave")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             ILogger log,
@@ -23,9 +23,9 @@ namespace Extensibility.Host
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var request = JsonConvert.DeserializeObject<SaveRequest>(requestBody);
+            var request = JsonConvert.DeserializeObject<PreviewSaveRequest>(requestBody);
 
-            var response = await Providers.TryGetProvider(request.Body!.Import!.Provider!)!.Save(request, cancellationToken);
+            var response = await Providers.TryGetProvider(request.Body!.Import!.Provider!)!.PreviewSave(request, cancellationToken);
             var responseBody = JsonConvert.SerializeObject(response);
 
             return new OkObjectResult(responseBody);

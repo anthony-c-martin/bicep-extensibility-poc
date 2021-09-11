@@ -19,9 +19,14 @@ namespace Extensibility.AzureStorage.Operations
             throw new NotImplementedException();
         }
 
-        public Task<PreviewSaveResponse> PreviewSave(PreviewSaveRequest request, CancellationToken cancellationToken)
+        public async Task<PreviewSaveResponse> PreviewSave(PreviewSaveRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await Task.Yield();
+
+            return new()
+            {
+                Body = request.Body,
+            };
         }
 
         public async Task<SaveResponse> Save(SaveRequest request, CancellationToken cancellationToken)

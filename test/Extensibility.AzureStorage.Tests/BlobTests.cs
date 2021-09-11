@@ -4,7 +4,6 @@ namespace Extensibility.AzureStorage.Tests
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using Extensibility.Core.Models;
     using Extensibility.Tests;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json.Linq;
@@ -16,7 +15,7 @@ namespace Extensibility.AzureStorage.Tests
         public async Task Save_blob()
         {
             // Blob requires a container first - create it here.
-            await CrudHelper.Save(new Resource
+            await CrudHelper.Save(new()
             {
                 Type = "container",
                 Import = TestHelper.BuildImport(),
@@ -26,7 +25,7 @@ namespace Extensibility.AzureStorage.Tests
                 }
             }, CancellationToken.None);
 
-            await CrudHelper.Save(new Resource
+            await CrudHelper.Save(new()
             {
                 Type = "blob",
                 Import = TestHelper.BuildImport(),

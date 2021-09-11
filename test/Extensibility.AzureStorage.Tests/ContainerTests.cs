@@ -2,7 +2,6 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Extensibility.Core.Models;
     using Extensibility.Tests;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json.Linq;
@@ -13,7 +12,7 @@
         [TestMethod]
         public async Task Save_container()
         {
-            await CrudHelper.Save(new Resource
+            await CrudHelper.Save(new()
             {
                 Type = "container",
                 Import = TestHelper.BuildImport(),

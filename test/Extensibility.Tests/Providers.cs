@@ -1,10 +1,10 @@
 ﻿namespace Extensibility.Tests
 {
     using System.Collections.Generic;
-    using Extensibility.Core;
     using Extensibility.AzureStorage;
     using Extensibility.Kubernetes;
-    
+    using Extensibility.Core.Contract;
+
     public static class Providers
     {
         private static readonly IReadOnlyDictionary<string, IExtensibilityProvider> ProvidersLookup = new Dictionary<string, IExtensibilityProvider>

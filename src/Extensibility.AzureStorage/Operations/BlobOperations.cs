@@ -5,31 +5,29 @@ namespace Extensibility.AzureStorage.Operations
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
-    using Extensibility.Core;
-    using Extensibility.Core.Models;
+    using Extensibility.Core.Contract;
+    using Extensibility.Core.Messages;
 
-    internal class BlobOperations : IResourceOperations
+    internal class BlobOperations : IExtensibilityProvider
     {
-        public async Task Delete(Resource resource, CancellationToken cancellationToken)
+        public Task<DeleteResponse> Delete(DeleteRequest request, CancellationToken cancellationToken)
         {
-            await Task.Yield();
             throw new NotImplementedException();
         }
 
-        public async Task<Resource> Get(Resource resource, CancellationToken cancellationToken)
+        public Task<GetResponse> Get(GetRequest request, CancellationToken cancellationToken)
         {
-            await Task.Yield();
             throw new NotImplementedException();
         }
 
-        public async Task<Resource> PreviewSave(Resource resource, CancellationToken cancellationToken)
+        public Task<PreviewSaveResponse> PreviewSave(PreviewSaveRequest request, CancellationToken cancellationToken)
         {
-            await Task.Yield();
             throw new NotImplementedException();
         }
 
-        public async Task<Resource> Save(Resource resource, CancellationToken cancellationToken)
+        public async Task<SaveResponse> Save(SaveRequest request, CancellationToken cancellationToken)
         {
+            var resource = request.Body!;
             var connectionString = resource.Import!.Config!["connectionString"]!.ToString();
 
             var containerName = resource.Properties!["containerName"]!.ToString();
@@ -44,7 +42,10 @@ namespace Extensibility.AzureStorage.Operations
                 .GetBlobClient(name)
                 .UploadAsync(new MemoryStream(bytes), overwrite: true, cancellationToken);
 
-            return resource;
+            return new()
+            {
+                Body = resource,
+            };
         }
     }
 }

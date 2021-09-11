@@ -1,8 +1,8 @@
-namespace Extensibility.Core.Models
+﻿namespace Extensibility.Core.Data
 {
     using Newtonsoft.Json.Linq;
 
-    public class Import
+    public class ExtensibleImport
     {
         public string? Provider { get; set; }
 

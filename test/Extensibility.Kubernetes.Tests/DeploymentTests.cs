@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Extensibility.Core.Models;
 using Extensibility.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
@@ -58,10 +57,10 @@ namespace Extensibility.Kubernetes.Tests
         [TestMethod]
         public async Task Save_Deployment()
         {
-            await CrudHelper.Save(new Resource
+            await CrudHelper.Save(new()
             {
                 Type = "apps/Deployment@v1",
-                Import = new Import()
+                Import = new()
                 {
                     Provider = "Kubernetes",
                     Config = new JObject()

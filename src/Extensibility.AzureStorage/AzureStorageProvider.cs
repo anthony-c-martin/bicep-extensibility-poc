@@ -11,6 +11,7 @@ namespace Extensibility.AzureStorage
     {
         private static readonly IReadOnlyDictionary<string, IExtensibilityProvider> OperationsLookup = new Dictionary<string, IExtensibilityProvider>
         {
+            ["service"] = new ServiceOperations(),
             ["blob"] = new BlobOperations(),
             ["container"] = new ContainerOperations(),
         };

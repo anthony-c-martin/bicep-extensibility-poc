@@ -16,24 +16,24 @@ namespace Extensibility.Host
         }
 
         public void Configuration(string source, string name, string value)
-            => log.LogDebug($"{nameof(Configuration)}: name='{name}', value='{value}'");
+            => log.LogInformation($"{nameof(Configuration)}: name='{name}', value='{value}'");
 
         public void EnterMethod(string invocationId, object instance, string method, IDictionary<string, object> parameters)
-            => log.LogDebug($"{nameof(EnterMethod)}: invocationId='{invocationId}', instance='{instance}', method='{method}', parameters='{parameters}'");
+            => log.LogInformation($"{nameof(EnterMethod)}: invocationId='{invocationId}', instance='{instance}', method='{method}', parameters='{parameters}'");
 
         public void ExitMethod(string invocationId, object returnValue)
-            => log.LogDebug($"{nameof(ExitMethod)}: invocationId='{invocationId}', returnValue='{returnValue}'");
+            => log.LogInformation($"{nameof(ExitMethod)}: invocationId='{invocationId}', returnValue='{returnValue}'");
 
         public void Information(string message)
-            => log.LogDebug($"{nameof(Information)}: message='{message}'");
+            => log.LogInformation($"{nameof(Information)}: message='{message}'");
  
         public void ReceiveResponse(string invocationId, HttpResponseMessage response)
-            => log.LogDebug($"{nameof(ReceiveResponse)}: invocationId='{invocationId}', response='{response}'");
+            => log.LogInformation($"{nameof(ReceiveResponse)}: invocationId='{invocationId}', response='{response}'");
 
         public void SendRequest(string invocationId, HttpRequestMessage request)
-            => log.LogDebug($"{nameof(SendRequest)}: invocationId='{invocationId}', request='{request}'");
+            => log.LogInformation($"{nameof(SendRequest)}: invocationId='{invocationId}', request='{request}'");
 
         public void TraceError(string invocationId, Exception exception)
-            => log.LogDebug($"{nameof(TraceError)}: invocationId='{invocationId}', exception='{exception}'");
+            => log.LogInformation($"{nameof(TraceError)}: invocationId='{invocationId}', exception='{exception}'");
     }
 }

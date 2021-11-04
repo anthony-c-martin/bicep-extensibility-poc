@@ -15,6 +15,83 @@ namespace Extensibility.Kubernetes.Tests
     [TestClass]
     public class DeploymentTests
     {
+        // Put your kubeconfig here for testing, but don't check it in!
+        private static readonly string VerySecretKubeConfig = @"
+apiVersion: v1
+... 
+".Replace("\r\n", "\n");
+
+        private static readonly JObject AzureVoteBackService = JObject.Parse(@"
+{
+  ""metadata"": {
+    ""name"": ""azure-vote-back""
+  },
+  ""spec"": {
+    ""ports"": [
+      {
+        ""port"": 6379
+      }
+    ],
+    ""selector"": {
+      ""app"": ""azure-vote-back""
+    }
+  }
+}
+");
+
+        private static readonly JObject AzureVoteBackDeployment = JObject.Parse(@"
+{
+  ""metadata"": {
+    ""name"": ""azure-vote-back""
+  },
+  ""spec"": {
+    ""replicas"": 1,
+    ""selector"": {
+      ""matchLabels"": {
+        ""app"": ""azure-vote-back""
+      }
+    },
+    ""template"": {
+      ""metadata"": {
+        ""labels"": {
+          ""app"": ""azure-vote-back""
+        }
+      },
+      ""spec"": {
+        ""containers"": [
+          {
+            ""name"": ""azure-vote-back"",
+            ""image"": ""mcr.microsoft.com/oss/bitnami/redis:6.0.8"",
+            ""env"": [
+              {
+                ""name"": ""ALLOW_EMPTY_PASSWORD"",
+                ""value"": ""yes""
+              }
+            ],
+            ""resources"": {
+              ""requests"": {
+                ""cpu"": ""100m"",
+                ""memory"": ""128Mi""
+              },
+              ""limits"": {
+                ""cpu"": ""250m"",
+                ""memory"": ""256Mi""
+              }
+            },
+            ""ports"": [
+              {
+                ""containerPort"": 6379,
+                ""name"": ""redis""
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+");
+
         private static readonly JObject Deployment = new JObject()
         {
             ["metadata"] = new JObject()
@@ -65,10 +142,49 @@ namespace Extensibility.Kubernetes.Tests
                     Provider = "Kubernetes",
                     Config = new JObject()
                     {
+                        ["kubeConfig"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(VerySecretKubeConfig)),
                         ["namespace"] = "default",
                     },
                 },
                 Properties = Deployment,
+            }, CancellationToken.None);
+        }
+
+        [TestMethod]
+        public async Task Save_AzureVoteBackService()
+        {
+            await CrudHelper.Save(new()
+            {
+                Type = "core/Service@v1",
+                Import = new()
+                {
+                    Provider = "Kubernetes",
+                    Config = new JObject()
+                    {
+                        ["kubeConfig"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(VerySecretKubeConfig)),
+                        ["namespace"] = "default",
+                    },
+                },
+                Properties = AzureVoteBackService,
+            }, CancellationToken.None);
+        }
+
+        [TestMethod]
+        public async Task Save_AzureVoteBackDeployment()
+        {
+            await CrudHelper.Save(new()
+            {
+                Type = "apps/Deployment@v1",
+                Import = new()
+                {
+                    Provider = "Kubernetes",
+                    Config = new JObject()
+                    {
+                        ["kubeConfig"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(VerySecretKubeConfig)),
+                        ["namespace"] = "default",
+                    },
+                },
+                Properties = AzureVoteBackDeployment,
             }, CancellationToken.None);
         }
     }

@@ -37,7 +37,7 @@ namespace Extensibility.Kubernetes
                 try
                 {
                     var response = await client.DeleteNamespacedCustomObjectWithHttpMessagesAsync(
-                        api.Group,
+                        api.Group ?? "",
                         api.Version,
                         @namespace ?? config.Namespace,
                         api.Name,
@@ -64,7 +64,7 @@ namespace Extensibility.Kubernetes
                 try
                 {
                     var response = await client.DeleteClusterCustomObjectWithHttpMessagesAsync(
-                        api.Group,
+                        api.Group ?? "",
                         api.Version,
                         api.Name,
                         name,
@@ -104,7 +104,7 @@ namespace Extensibility.Kubernetes
                 try
                 {
                     var response = await client.GetNamespacedCustomObjectWithHttpMessagesAsync(
-                        api.Group,
+                        api.Group ?? "",
                         api.Version,
                         @namespace ?? config.Namespace,
                         api.Name,
@@ -138,7 +138,7 @@ namespace Extensibility.Kubernetes
                 try
                 {
                     var response = await client.GetClusterCustomObjectWithHttpMessagesAsync(
-                        api.Group,
+                        api.Group ?? "",
                         api.Version,
                         api.Name,
                         name,
@@ -190,7 +190,7 @@ namespace Extensibility.Kubernetes
                 {
                     var response = await client.PatchNamespacedCustomObjectWithHttpMessagesAsync(
                         new k8s.Models.V1Patch(resource.Properties, k8s.Models.V1Patch.PatchType.ApplyPatch),
-                        api.Group,
+                        api.Group ?? "",
                         api.Version,
                         @namespace ?? config.Namespace,
                         api.Name,
@@ -241,7 +241,7 @@ namespace Extensibility.Kubernetes
                 {
                     var response = await client.PatchClusterCustomObjectWithHttpMessagesAsync(
                         new k8s.Models.V1Patch(resource.Properties, k8s.Models.V1Patch.PatchType.ApplyPatch),
-                        api.Group,
+                        api.Group ?? "",
                         api.Version,
                         api.Name,
                         name,
@@ -309,7 +309,7 @@ namespace Extensibility.Kubernetes
                 {
                     var response = await client.PatchNamespacedCustomObjectWithHttpMessagesAsync(
                         new k8s.Models.V1Patch(resource.Properties, k8s.Models.V1Patch.PatchType.ApplyPatch),
-                        api.Group,
+                        api.Group ?? "",
                         api.Version,
                         @namespace ?? config.Namespace,
                         api.Name,
@@ -361,7 +361,7 @@ namespace Extensibility.Kubernetes
                 {
                     var response = await client.PatchClusterCustomObjectWithHttpMessagesAsync(
                         new k8s.Models.V1Patch(resource.Properties, k8s.Models.V1Patch.PatchType.ApplyPatch),
-                        api.Group,
+                        api.Group ?? "",
                         api.Version,
                         api.Name,
                         name,
@@ -422,18 +422,13 @@ namespace Extensibility.Kubernetes
         // and operation changed the set of resources while in progress (requery on cache miss would likely work).
         private async Task<k8s.Models.V1APIResource> GetApiResourceAsync(CoolKubernetesClient client, GroupVersionKind gvk, CancellationToken cancellationToken)
         {
-            var group = gvk.Group switch {
-                "core" => null,
-                _ => gvk.Group,
-            };
-
-            var resources = await client.GetAPIResourcesAsync(group, gvk.Version, cancellationToken);
+            var resources = await client.GetAPIResourcesAsync(gvk.Group, gvk.Version, cancellationToken);
             foreach (var resource in resources.Resources)
             {
                 if (resource.Kind == gvk.Kind)
                 {
                     // Not set by server for some reason :-/
-                    resource.Group = group;
+                    resource.Group = gvk.Group;
                     resource.Version = gvk.Version;
 
                     return resource;

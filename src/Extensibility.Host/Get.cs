@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Extensibility.Core.Messages;
+using Microsoft.Rest;
 
 namespace Extensibility.Host
 {
@@ -20,6 +21,9 @@ namespace Extensibility.Host
             ILogger log,
             CancellationToken cancellationToken)
         {
+            ServiceClientTracing.IsEnabled = true;
+            ServiceClientTracing.AddTracingInterceptor(new LoggerTracingInterceptor(log));
+
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();

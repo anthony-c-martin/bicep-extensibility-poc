@@ -422,13 +422,18 @@ namespace Extensibility.Kubernetes
         // and operation changed the set of resources while in progress (requery on cache miss would likely work).
         private async Task<k8s.Models.V1APIResource> GetApiResourceAsync(CoolKubernetesClient client, GroupVersionKind gvk, CancellationToken cancellationToken)
         {
-            var resources = await client.GetAPIResourcesAsync(gvk.Group, gvk.Version, cancellationToken);
+            var group = gvk.Group switch {
+                "core" => null,
+                _ => gvk.Group,
+            };
+
+            var resources = await client.GetAPIResourcesAsync(group, gvk.Version, cancellationToken);
             foreach (var resource in resources.Resources)
             {
                 if (resource.Kind == gvk.Kind)
                 {
                     // Not set by server for some reason :-/
-                    resource.Group = gvk.Group;
+                    resource.Group = group;
                     resource.Version = gvk.Version;
 
                     return resource;

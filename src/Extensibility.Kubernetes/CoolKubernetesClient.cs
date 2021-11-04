@@ -54,9 +54,13 @@ namespace Extensibility.Kubernetes
                 ServiceClientTracing.Enter(_invocationId, this, "GetAPIResources1", tracingParameters);
             }
             // Construct URL
-            var apiVersion = group is null ? version : $"{group}/{version}";
+            var urlSuffix = group switch {
+                {} => $"/apis/{group}/{version}/",
+                _ => $"/api/{version}/",
+            };
+
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), $"/apis/{apiVersion}/").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), urlSuffix).ToString();
             List<string> _queryParameters = new List<string>();
             if (_queryParameters.Count > 0)
             {

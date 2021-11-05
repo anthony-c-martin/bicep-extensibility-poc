@@ -351,3 +351,7 @@ MigrationBackup/
 
 # osx turds
 .DS_Store
+
+# deployment artifacts
+deploy/package/
+deploy/package.zip

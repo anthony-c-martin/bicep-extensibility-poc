@@ -15,6 +15,10 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
 resource serverFarm 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: baseName
   location: location
+  kind: 'functionapp,linux'
+  properties: {
+    reserved: true
+  }
   sku: {
     name: 'Y1'
     tier: 'Dynamic'
@@ -24,7 +28,7 @@ resource serverFarm 'Microsoft.Web/serverfarms@2020-06-01' = {
 resource functionApp 'Microsoft.Web/sites@2020-06-01' = {
   name: baseName
   location: location
-  kind: 'functionapp'
+  kind: 'functionapp,linux'
   properties: {
     httpsOnly: true
     serverFarmId: serverFarm.id
@@ -36,14 +40,10 @@ resource functionApp 'Microsoft.Web/sites@2020-06-01' = {
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
-          value: 'dotnet'
+          value: 'dotnet-isolated'
         }
         {
           name: 'AzureWebJobsStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-        }
-        {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
         }
         {

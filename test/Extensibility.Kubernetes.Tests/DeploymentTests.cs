@@ -16,10 +16,8 @@ namespace Extensibility.Kubernetes.Tests
     public class DeploymentTests
     {
         // Put your kubeconfig here for testing, but don't check it in!
-        private static readonly string VerySecretKubeConfig = @"
-apiVersion: v1
-... 
-".Replace("\r\n", "\n");
+        private static readonly string Base64KubeConfig = Environment.GetEnvironmentVariable("KUBECONFIG_BASE64") ?? 
+            throw new InvalidOperationException($"You must set the KUBECONFIG_BASE64 env variable before running this test. Try running:\nexport KUBECONFIG_BASE64=$(base64 -w 0 ./path/to/kubeconfig)");
 
         private static readonly JObject AzureVoteBackService = JObject.Parse(@"
 {
@@ -142,7 +140,7 @@ apiVersion: v1
                     Provider = "Kubernetes",
                     Config = new JObject()
                     {
-                        ["kubeConfig"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(VerySecretKubeConfig)),
+                        ["kubeConfig"] = Base64KubeConfig,
                         ["namespace"] = "default",
                     },
                 },
@@ -161,7 +159,7 @@ apiVersion: v1
                     Provider = "Kubernetes",
                     Config = new JObject()
                     {
-                        ["kubeConfig"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(VerySecretKubeConfig)),
+                        ["kubeConfig"] = Base64KubeConfig,
                         ["namespace"] = "default",
                     },
                 },
@@ -180,7 +178,7 @@ apiVersion: v1
                     Provider = "Kubernetes",
                     Config = new JObject()
                     {
-                        ["kubeConfig"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(VerySecretKubeConfig)),
+                        ["kubeConfig"] = Base64KubeConfig,
                         ["namespace"] = "default",
                     },
                 },

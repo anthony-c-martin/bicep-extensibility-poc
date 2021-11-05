@@ -1,37 +1,22 @@
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Extensibility.Core.Messages;
-using Microsoft.Rest;
 
 namespace Extensibility.Host
 {
     public static class PreviewSave
     {
-        [FunctionName("PreviewSave")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
-            ILogger log,
-            CancellationToken cancellationToken)
+        [Function(nameof(PreviewSave))]
+        public static async Task<HttpResponseData> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req,
+            FunctionContext context)
         {
-            ServiceClientTracing.IsEnabled = true;
-            ServiceClientTracing.AddTracingInterceptor(new LoggerTracingInterceptor(log));
-
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var request = JsonConvert.DeserializeObject<PreviewSaveRequest>(requestBody);
-
-            var response = await Providers.TryGetProvider(request.Body!.Import!.Provider!)!.PreviewSave(request, cancellationToken);
-            var responseBody = JsonConvert.SerializeObject(response);
-
-            return new OkObjectResult(responseBody);
+            return await RequestHelper.Handle(
+                req,
+                context,
+                async (PreviewSaveRequest request) => await Providers.TryGetProvider(request.Body!.Import!.Provider!)!.PreviewSave(request, CancellationToken.None));
         }
     }
 }

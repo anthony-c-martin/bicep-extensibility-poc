@@ -7,11 +7,13 @@
       "args": [
         "clean",
         "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary",
-        "${workspaceFolder}/src/Extensibility.Host"
+        "/consoleloggerparameters:NoSummary"
       ],
       "type": "process",
-      "problemMatcher": "$msCompile"
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Extensibility.Host"
+      }
     },
     {
       "label": "build (functions)",
@@ -19,8 +21,7 @@
       "args": [
         "build",
         "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary",
-        "${workspaceFolder}/src/Extensibility.Host"
+        "/consoleloggerparameters:NoSummary"
       ],
       "type": "process",
       "dependsOn": "clean (functions)",
@@ -28,7 +29,10 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": "$msCompile"
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Extensibility.Host"
+      }
     },
     {
       "label": "clean release (functions)",
@@ -38,11 +42,13 @@
         "--configuration",
         "Release",
         "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary",
-        "${workspaceFolder}/src/Extensibility.Host"
+        "/consoleloggerparameters:NoSummary"
       ],
       "type": "process",
-      "problemMatcher": "$msCompile"
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Extensibility.Host"
+      }
     },
     {
       "label": "publish (functions)",
@@ -52,18 +58,20 @@
         "--configuration",
         "Release",
         "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary",
-        "${workspaceFolder}/src/Extensibility.Host"
+        "/consoleloggerparameters:NoSummary"
       ],
       "type": "process",
       "dependsOn": "clean release (functions)",
-      "problemMatcher": "$msCompile"
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Extensibility.Host"
+      }
     },
     {
       "type": "func",
       "dependsOn": "build (functions)",
       "options": {
-        "cwd": "${workspaceFolder}/src/Extensibility.Host/bin/Debug/netcoreapp3.1"
+        "cwd": "${workspaceFolder}/src/Extensibility.Host/bin/Debug/net5.0"
       },
       "command": "host start",
       "isBackground": true,
